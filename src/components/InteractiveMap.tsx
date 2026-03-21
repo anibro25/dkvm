@@ -21,11 +21,15 @@ interface GeoData {
 }
 
 const TALUK_COLORS: Record<string, { fill: string; stroke: string; label: string }> = {
-  Bantval:    { fill: "hsl(200, 55%, 52%)", stroke: "hsl(200, 55%, 38%)", label: "Bantwal" },
-  Beltangadi: { fill: "hsl(28, 65%, 55%)",  stroke: "hsl(28, 65%, 40%)",  label: "Beltangadi" },
-  Mangalore:  { fill: "hsl(340, 50%, 52%)", stroke: "hsl(340, 50%, 38%)", label: "Mangalore" },
-  Puttur:     { fill: "hsl(160, 45%, 45%)", stroke: "hsl(160, 45%, 32%)", label: "Puttur" },
-  Sulya:      { fill: "hsl(270, 40%, 52%)", stroke: "hsl(270, 40%, 38%)", label: "Sulya" },
+  Bantval:    { fill: "hsl(210, 60%, 50%)", stroke: "hsl(210, 60%, 35%)", label: "Bantwal" },
+  Beltangadi: { fill: "hsl(145, 50%, 42%)", stroke: "hsl(145, 50%, 28%)", label: "Beltangadi" },
+  Mangalore:  { fill: "hsl(350, 55%, 50%)", stroke: "hsl(350, 55%, 35%)", label: "Mangalore" },
+  Puttur:     { fill: "hsl(35, 65%, 50%)",  stroke: "hsl(35, 65%, 35%)",  label: "Puttur" },
+  Sulya:      { fill: "hsl(275, 45%, 50%)", stroke: "hsl(275, 45%, 35%)", label: "Sullia" },
+  Kadaba:     { fill: "hsl(180, 50%, 40%)", stroke: "hsl(180, 50%, 28%)", label: "Kadaba" },
+  Moodabidri: { fill: "hsl(55, 55%, 45%)",  stroke: "hsl(55, 55%, 30%)",  label: "Moodabidri" },
+  Ullal:      { fill: "hsl(15, 60%, 50%)",  stroke: "hsl(15, 60%, 35%)",  label: "Ullal" },
+  Mulki:      { fill: "hsl(310, 40%, 50%)", stroke: "hsl(310, 40%, 35%)", label: "Mulki" },
 };
 
 const SVG_WIDTH = 900;
@@ -117,6 +121,12 @@ const InteractiveMap = () => {
       centroid: getCentroid(f.geometry),
     }));
   }, [geoData]);
+
+  // Combined outline of all villages for district boundary
+  const districtOutline = useMemo(() => {
+    if (!paths.length) return "";
+    return paths.map((p) => p.d).join(" ");
+  }, [paths]);
 
   const filteredVillages = useMemo(() => {
     if (!searchQuery.trim() || !geoData) return [];
@@ -369,6 +379,18 @@ const InteractiveMap = () => {
               <feDropShadow dx="0" dy="0" stdDeviation="5" floodOpacity="0.6" />
             </filter>
           </defs>
+
+          {/* District outline */}
+          {districtOutline && (
+            <path
+              d={districtOutline}
+              fill="none"
+              stroke="hsl(var(--foreground))"
+              strokeWidth={3 / scale}
+              strokeLinejoin="round"
+              style={{ pointerEvents: "none" }}
+            />
+          )}
 
           {/* Village polygons */}
           {paths.map(({ feature, d }, i) => {
