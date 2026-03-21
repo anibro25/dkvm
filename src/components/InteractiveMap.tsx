@@ -122,6 +122,12 @@ const InteractiveMap = () => {
     }));
   }, [geoData]);
 
+  // Combined outline of all villages for district boundary
+  const districtOutline = useMemo(() => {
+    if (!paths.length) return "";
+    return paths.map((p) => p.d).join(" ");
+  }, [paths]);
+
   const filteredVillages = useMemo(() => {
     if (!searchQuery.trim() || !geoData) return [];
     const q = searchQuery.toLowerCase();
