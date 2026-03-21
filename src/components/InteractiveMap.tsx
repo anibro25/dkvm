@@ -380,6 +380,18 @@ const InteractiveMap = () => {
             </filter>
           </defs>
 
+          {/* District outline */}
+          {districtOutline && (
+            <path
+              d={districtOutline}
+              fill="none"
+              stroke="hsl(var(--foreground))"
+              strokeWidth={3 / scale}
+              strokeLinejoin="round"
+              style={{ pointerEvents: "none" }}
+            />
+          )}
+
           {/* Village polygons */}
           {paths.map(({ feature, d }, i) => {
             const isHovered = hoveredVillage === feature;
